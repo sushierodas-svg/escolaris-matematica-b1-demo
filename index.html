@@ -1,1 +1,194 @@
-<!-- Página inicial del demo Escolaris Matemática B1 -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Escolaris Matemática B1</title>
+  <style>
+    :root {
+      --escolaris-orange: #db6015;
+      --escolaris-gold: #f7be00;
+      --escolaris-blue: #244b5a;
+      --escolaris-red: #993921;
+      --escolaris-light: #f0f8ff;
+      --escolaris-white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: linear-gradient(180deg, var(--escolaris-light) 0%, var(--escolaris-white) 100%);
+      color: var(--escolaris-blue);
+      font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+      line-height: 1.5;
+    }
+
+    .preview-shell {
+      margin: 0 auto;
+      max-width: 1100px;
+      padding: 24px;
+      width: 100%;
+    }
+
+    .hero {
+      background: var(--escolaris-white);
+      border: 3px solid rgba(36, 75, 90, 0.12);
+      border-radius: 28px;
+      box-shadow: 0 14px 32px rgba(36, 75, 90, 0.16);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .hero-top {
+      background:
+        radial-gradient(circle at top left, rgba(247, 190, 0, 0.3), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(219, 96, 21, 0.18), transparent 35%),
+        var(--escolaris-white);
+      padding: 34px;
+    }
+
+    .badge {
+      background: var(--escolaris-gold);
+      border-radius: 999px;
+      color: var(--escolaris-blue);
+      display: inline-block;
+      font-weight: 800;
+      padding: 8px 16px;
+    }
+
+    h1 {
+      color: var(--escolaris-blue);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      margin: 16px 0 10px;
+    }
+
+    p {
+      font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+      margin: 0 0 16px;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .primary-link,
+    .secondary-link {
+      border-radius: 999px;
+      display: inline-block;
+      font-weight: 900;
+      padding: 12px 18px;
+      text-decoration: none;
+    }
+
+    .primary-link {
+      background: var(--escolaris-orange);
+      color: var(--escolaris-white);
+    }
+
+    .secondary-link {
+      background: var(--escolaris-gold);
+      color: var(--escolaris-blue);
+    }
+
+    .primary-link:focus-visible,
+    .secondary-link:focus-visible {
+      outline: 4px solid rgba(36, 75, 90, 0.28);
+      outline-offset: 3px;
+    }
+
+    .preview-frame-card {
+      background: var(--escolaris-white);
+      border: 3px solid rgba(36, 75, 90, 0.12);
+      border-radius: 24px;
+      box-shadow: 0 12px 26px rgba(36, 75, 90, 0.12);
+      overflow: hidden;
+    }
+
+    .frame-heading {
+      align-items: center;
+      background: var(--escolaris-blue);
+      color: var(--escolaris-white);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      padding: 16px 20px;
+    }
+
+    .frame-heading h2 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .frame-note {
+      color: var(--escolaris-gold);
+      font-weight: 800;
+      margin: 0;
+    }
+
+    iframe {
+      border: 0;
+      display: block;
+      min-height: 760px;
+      width: 100%;
+    }
+
+    @media (max-width: 720px) {
+      .preview-shell {
+        padding: 12px;
+      }
+
+      .hero,
+      .preview-frame-card {
+        border-radius: 18px;
+      }
+
+      .hero-top {
+        padding: 24px 18px;
+      }
+
+      iframe {
+        min-height: 720px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-shell">
+    <section class="hero" aria-labelledby="preview-title">
+      <div class="hero-top">
+        <span class="badge">Vista previa</span>
+        <h1 id="preview-title">Escolaris Matemática B1</h1>
+        <p>Acceso rápido a la lectura interactiva de la Lección 1: <strong>Cuando una cantidad cambia</strong>.</p>
+        <p>Esta página permite abrir la lectura en una pestaña nueva o revisarla dentro de una vista tipo iframe.</p>
+        <div class="actions">
+          <a class="primary-link" href="lecciones/leccion-01-variables/lectura-interactiva.html">Abrir lectura interactiva</a>
+          <a class="secondary-link" href="lecciones/leccion-01-variables/lectura-interactiva.html" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview-frame-card" aria-labelledby="frame-title">
+      <div class="frame-heading">
+        <h2 id="frame-title">Vista incrustada de la lectura</h2>
+        <p class="frame-note">Lección 1</p>
+      </div>
+      <iframe src="lecciones/leccion-01-variables/lectura-interactiva.html" title="Lectura interactiva: Cuando una cantidad cambia"></iframe>
+    </section>
+  </main>
+</body>
+</html>
