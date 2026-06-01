@@ -40,8 +40,38 @@
     .lesson-shell {
       margin: 0 auto;
       max-width: 980px;
-      padding: 20px;
+      padding: 78px 20px 20px;
       width: 100%;
+    }
+
+    .home-button {
+      align-items: center;
+      background: var(--escolaris-orange);
+      border: 3px solid var(--escolaris-gold);
+      border-radius: 999px;
+      box-shadow: 0 12px 24px rgba(36, 75, 90, 0.22);
+      color: var(--escolaris-white);
+      display: inline-flex;
+      font-size: 0.98rem;
+      font-weight: 900;
+      gap: 8px;
+      left: 16px;
+      padding: 10px 16px;
+      position: fixed;
+      text-decoration: none;
+      top: 16px;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+      z-index: 20;
+    }
+
+    .home-button:hover {
+      box-shadow: 0 16px 28px rgba(36, 75, 90, 0.26);
+      transform: translateY(-2px);
+    }
+
+    .home-button:focus-visible {
+      outline: 4px solid rgba(247, 190, 0, 0.7);
+      outline-offset: 4px;
     }
 
     .book-card {
@@ -308,7 +338,14 @@
 
     @media (max-width: 720px) {
       .lesson-shell {
-        padding: 10px;
+        padding: 72px 10px 10px;
+      }
+
+      .home-button {
+        font-size: 0.9rem;
+        left: 10px;
+        padding: 9px 13px;
+        top: 10px;
       }
 
       .book-card {
@@ -341,6 +378,7 @@
   </style>
 </head>
 <body>
+  <a class="home-button" href="../../index.html" aria-label="Volver al inicio">← Volver al inicio</a>
   <main class="lesson-shell" aria-label="Lectura interactiva: Cuando una cantidad cambia">
     <section class="book-card">
       <div class="progress-wrap" aria-hidden="true">
