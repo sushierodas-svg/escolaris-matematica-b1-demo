@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Maestro de Producción Escolaris IA</title>
+  <style>
+    :root {
+      --escolaris-orange: #db6015;
+      --escolaris-gold: #f7be00;
+      --escolaris-blue: #244b5a;
+      --escolaris-red: #993921;
+      --escolaris-light: #f0f8ff;
+      --escolaris-white: #ffffff;
+      --text-soft: rgba(36, 75, 90, 0.78);
+      --shadow: 0 22px 48px rgba(36, 75, 90, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 8% 10%, rgba(247, 190, 0, 0.24), transparent 28%),
+        radial-gradient(circle at 92% 12%, rgba(219, 96, 21, 0.16), transparent 26%),
+        linear-gradient(180deg, var(--escolaris-light) 0%, var(--escolaris-white) 62%, var(--escolaris-light) 100%);
+      color: var(--escolaris-blue);
+      font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+      line-height: 1.5;
+    }
+
+    .presentation {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 0 auto;
+      max-width: 1180px;
+      min-height: 100vh;
+      padding: clamp(14px, 3vw, 28px);
+      width: 100%;
+    }
+
+    .topbar {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .brand {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      min-width: 240px;
+    }
+
+    .brand-mark {
+      align-items: center;
+      background: var(--escolaris-blue);
+      border: 4px solid var(--escolaris-gold);
+      border-radius: 18px;
+      box-shadow: 0 10px 22px rgba(36, 75, 90, 0.18);
+      color: var(--escolaris-white);
+      display: inline-flex;
+      font-size: 1.55rem;
+      font-weight: 900;
+      height: 52px;
+      justify-content: center;
+      width: 52px;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-text strong {
+      color: var(--escolaris-blue);
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .brand-text span {
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .counter {
+      background: rgba(255, 255, 255, 0.82);
+      border: 2px solid rgba(36, 75, 90, 0.12);
+      border-radius: 999px;
+      color: var(--escolaris-blue);
+      font-weight: 900;
+      padding: 10px 16px;
+    }
+
+    .progress-wrap {
+      background: rgba(36, 75, 90, 0.12);
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, var(--escolaris-orange), var(--escolaris-gold));
+      border-radius: inherit;
+      height: 100%;
+      transition: width 220ms ease;
+      width: 7.14%;
+    }
+
+    .slide-shell {
+      background: rgba(255, 255, 255, 0.74);
+      border: 2px solid rgba(36, 75, 90, 0.10);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide-shell::before,
+    .slide-shell::after {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      z-index: 0;
+    }
+
+    .slide-shell::before {
+      background: var(--escolaris-gold);
+      border-radius: 999px;
+      height: 160px;
+      opacity: 0.22;
+      right: -62px;
+      top: -72px;
+      width: 160px;
+    }
+
+    .slide-shell::after {
+      background: var(--escolaris-orange);
+      border-radius: 999px;
+      bottom: -88px;
+      height: 210px;
+      left: -96px;
+      opacity: 0.12;
+      width: 210px;
+    }
+
+    .slide {
+      display: none;
+      min-height: clamp(520px, 62vh, 720px);
+      padding: clamp(24px, 5vw, 62px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide.active {
+      animation: fadeIn 260ms ease;
+      display: grid;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-content {
+      align-self: center;
+      display: grid;
+      gap: 24px;
+      max-width: 980px;
+      width: 100%;
+    }
+
+    .slide-title-row {
+      align-items: start;
+      display: grid;
+      gap: 14px;
+    }
+
+    .kicker {
+      align-items: center;
+      color: var(--escolaris-orange);
+      display: inline-flex;
+      font-size: 0.88rem;
+      font-weight: 900;
+      gap: 8px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before {
+      background: var(--escolaris-gold);
+      border-radius: 999px;
+      content: "";
+      display: inline-block;
+      height: 10px;
+      width: 32px;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: var(--escolaris-blue);
+      font-size: clamp(2.25rem, 6vw, 5rem);
+      letter-spacing: -0.045em;
+      line-height: 0.98;
+      max-width: 930px;
+    }
+
+    h2 {
+      color: var(--escolaris-blue);
+      font-size: clamp(2rem, 4.9vw, 4.1rem);
+      letter-spacing: -0.04em;
+      line-height: 1.04;
+    }
+
+    .subtitle {
+      color: var(--text-soft);
+      font-size: clamp(1.12rem, 2.5vw, 1.55rem);
+      font-weight: 650;
+      max-width: 900px;
+    }
+
+    .lead {
+      color: var(--text-soft);
+      font-size: clamp(1.06rem, 2vw, 1.28rem);
+      max-width: 860px;
+    }
+
+    .accent-card {
+      background: var(--escolaris-blue);
+      border-left: 12px solid var(--escolaris-gold);
+      border-radius: 22px;
+      color: var(--escolaris-white);
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .accent-card strong {
+      color: var(--escolaris-gold);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--escolaris-white);
+      border: 2px solid rgba(36, 75, 90, 0.10);
+      border-radius: 22px;
+      box-shadow: 0 10px 24px rgba(36, 75, 90, 0.10);
+      padding: 20px;
+    }
+
+    .card h3 {
+      color: var(--escolaris-blue);
+      font-size: 1.16rem;
+      margin: 0 0 8px;
+    }
+
+    .card p {
+      color: var(--text-soft);
+      font-weight: 650;
+    }
+
+    .icon {
+      align-items: center;
+      background: var(--escolaris-gold);
+      border-radius: 16px;
+      color: var(--escolaris-blue);
+      display: inline-flex;
+      font-size: 1.45rem;
+      font-weight: 900;
+      height: 46px;
+      justify-content: center;
+      margin-bottom: 12px;
+      width: 46px;
+    }
+
+    ul {
+      display: grid;
+      gap: 13px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      align-items: flex-start;
+      background: rgba(255, 255, 255, 0.86);
+      border: 2px solid rgba(36, 75, 90, 0.09);
+      border-radius: 18px;
+      color: var(--escolaris-blue);
+      display: flex;
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+      font-weight: 750;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+
+    li::before {
+      background: var(--escolaris-orange);
+      border-radius: 999px;
+      color: var(--escolaris-white);
+      content: "✓";
+      display: inline-flex;
+      flex: 0 0 auto;
+      font-size: 0.9rem;
+      font-weight: 900;
+      height: 26px;
+      justify-content: center;
+      line-height: 26px;
+      margin-top: 1px;
+      width: 26px;
+    }
+
+    .layer-card {
+      border-top: 8px solid var(--escolaris-orange);
+      min-height: 178px;
+    }
+
+    .layer-card:nth-child(2) {
+      border-top-color: var(--escolaris-gold);
+    }
+
+    .layer-card:nth-child(3) {
+      border-top-color: var(--escolaris-blue);
+    }
+
+    .layer-card:nth-child(4) {
+      border-top-color: var(--escolaris-red);
+    }
+
+    .file-list li::before {
+      content: "HTML";
+      font-size: 0.62rem;
+      width: 38px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      align-items: center;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 54px 1fr;
+    }
+
+    .step-number {
+      align-items: center;
+      background: var(--escolaris-blue);
+      border: 4px solid var(--escolaris-gold);
+      border-radius: 18px;
+      color: var(--escolaris-white);
+      display: flex;
+      font-size: 1.25rem;
+      font-weight: 900;
+      height: 54px;
+      justify-content: center;
+      width: 54px;
+    }
+
+    .step-text {
+      background: var(--escolaris-white);
+      border: 2px solid rgba(36, 75, 90, 0.10);
+      border-radius: 18px;
+      color: var(--escolaris-blue);
+      font-size: clamp(1.02rem, 2vw, 1.2rem);
+      font-weight: 800;
+      padding: 16px 18px;
+    }
+
+    .price-table {
+      background: var(--escolaris-white);
+      border: 2px solid rgba(36, 75, 90, 0.14);
+      border-radius: 22px;
+      box-shadow: 0 12px 26px rgba(36, 75, 90, 0.12);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      padding: 16px 18px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--escolaris-blue);
+      color: var(--escolaris-white);
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    td {
+      border-top: 1px solid rgba(36, 75, 90, 0.12);
+      color: var(--escolaris-blue);
+      font-size: 1.05rem;
+      font-weight: 750;
+    }
+
+    .note {
+      background: rgba(247, 190, 0, 0.18);
+      border: 2px solid rgba(247, 190, 0, 0.55);
+      border-radius: 18px;
+      color: var(--escolaris-blue);
+      font-weight: 800;
+      padding: 14px 16px;
+    }
+
+    .comparison {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric {
+      background: var(--escolaris-white);
+      border-radius: 24px;
+      box-shadow: 0 12px 26px rgba(36, 75, 90, 0.12);
+      overflow: hidden;
+    }
+
+    .metric-title {
+      background: var(--escolaris-blue);
+      color: var(--escolaris-white);
+      font-weight: 900;
+      padding: 14px 18px;
+    }
+
+    .metric-body {
+      padding: 20px;
+    }
+
+    .metric-value {
+      color: var(--escolaris-orange);
+      display: block;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-body p {
+      color: var(--text-soft);
+      font-weight: 700;
+    }
+
+    .final-message {
+      background:
+        linear-gradient(135deg, rgba(36, 75, 90, 0.96), rgba(153, 57, 33, 0.92)),
+        var(--escolaris-blue);
+      border-radius: 28px;
+      color: var(--escolaris-white);
+      padding: clamp(24px, 4vw, 44px);
+    }
+
+    .final-message h2,
+    .final-message p {
+      color: var(--escolaris-white);
+    }
+
+    .final-message strong {
+      color: var(--escolaris-gold);
+    }
+
+    .demo-action {
+      align-items: center;
+      background: var(--escolaris-orange);
+      border-radius: 999px;
+      box-shadow: 0 12px 24px rgba(219, 96, 21, 0.24);
+      color: var(--escolaris-white);
+      display: inline-flex;
+      font-size: clamp(1.05rem, 2vw, 1.22rem);
+      font-weight: 900;
+      justify-content: center;
+      justify-self: start;
+      min-height: 52px;
+      padding: 14px 24px;
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .demo-action:hover {
+      box-shadow: 0 16px 30px rgba(219, 96, 21, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .demo-action:focus-visible {
+      outline: 4px solid rgba(247, 190, 0, 0.72);
+      outline-offset: 4px;
+    }
+
+    .controls {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .nav-button {
+      align-items: center;
+      background: var(--escolaris-blue);
+      border: 0;
+      border-radius: 999px;
+      color: var(--escolaris-white);
+      cursor: pointer;
+      display: inline-flex;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      gap: 8px;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 22px;
+      transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
+    }
+
+    .nav-button.next {
+      background: var(--escolaris-orange);
+    }
+
+    .nav-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .nav-button:focus-visible {
+      outline: 4px solid rgba(247, 190, 0, 0.7);
+      outline-offset: 3px;
+    }
+
+    .nav-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .hint {
+      color: var(--text-soft);
+      font-size: 0.95rem;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .grid.two,
+      .grid.four,
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .presentation {
+        gap: 12px;
+        padding: 10px;
+      }
+
+      .topbar,
+      .controls {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .slide-shell {
+        border-radius: 22px;
+      }
+
+      .slide {
+        padding: 22px 16px;
+      }
+
+      li {
+        padding: 12px;
+      }
+
+      .step {
+        grid-template-columns: 46px 1fr;
+      }
+
+      .step-number {
+        border-radius: 14px;
+        height: 46px;
+        width: 46px;
+      }
+
+      .price-table {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 560px;
+      }
+
+      .demo-action,
+      .nav-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="presentation" aria-label="Presentación: Sistema Maestro de Producción Escolaris IA">
+    <header class="topbar">
+      <div class="brand" aria-label="Escolaris IA">
+        <span class="brand-mark">IA</span>
+        <div class="brand-text">
+          <strong>Escolaris</strong>
+          <span>Producción digital para Canvas LMS</span>
+        </div>
+      </div>
+      <div class="counter" aria-live="polite">
+        Diapositiva <span id="currentSlide">1</span> de <span id="totalSlides">14</span>
+      </div>
+    </header>
+
+    <div class="progress-wrap" aria-label="Progreso de la presentación">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <section class="slide-shell">
+      <article class="slide active" aria-labelledby="slide-1-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Propuesta institucional</span>
+            <h1 id="slide-1-title">Sistema Maestro de Producción Escolaris IA</h1>
+            <p class="subtitle">Uso de Codex, GitHub y prompts especializados para crear lecciones interactivas, estandarizadas y listas para Canvas LMS.</p>
+          </div>
+          <div class="accent-card">
+            <p><strong>Objetivo:</strong> acelerar la producción digital sin perder control académico, calidad pedagógica ni trazabilidad técnica.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-2-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Alcance de prueba</span>
+            <h2 id="slide-2-title">¿Qué se está probando?</h2>
+          </div>
+          <ul>
+            <li>Generación de recursos HTML para Canvas iframe.</li>
+            <li>Flujo profesional con GitHub y Pull Requests.</li>
+            <li>Control de calidad técnico y pedagógico.</li>
+            <li>Escalabilidad para 24 lecciones y otras materias.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-3-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Resultados iniciales</span>
+            <h2 id="slide-3-title">Logros de la prueba con Codex</h2>
+          </div>
+          <div class="grid two">
+            <div class="card"><span class="icon">1</span><h3>Conexión operativa</h3><p>Codex conectado con GitHub para trabajar sobre archivos del repositorio.</p></div>
+            <div class="card"><span class="icon">2</span><h3>HTML interactivo</h3><p>Lectura interactiva generada como recurso independiente.</p></div>
+            <div class="card"><span class="icon">3</span><h3>Vista previa</h3><p>Página index.html creada para revisar el recurso de forma rápida.</p></div>
+            <div class="card"><span class="icon">4</span><h3>Revisión formal</h3><p>QA técnico, QA pedagógico y revisión mediante Pull Request.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-4-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Arquitectura recomendada</span>
+            <h2 id="slide-4-title">Sistema por capas</h2>
+            <p class="lead">No se recomienda depender de un único prompt maestro gigante. Es más seguro, escalable y controlable trabajar con cuatro capas especializadas.</p>
+          </div>
+          <div class="grid four">
+            <div class="card layer-card"><h3>Prompt Maestro Pedagógico</h3><p>Define la base académica.</p></div>
+            <div class="card layer-card"><h3>Prompt Maestro de Producción Digital</h3><p>Convierte contenido validado en HTML.</p></div>
+            <div class="card layer-card"><h3>Prompt Maestro Audiovisual</h3><p>Organiza guiones, video y audio.</p></div>
+            <div class="card layer-card"><h3>Prompt Maestro QA</h3><p>Valida calidad antes de publicar.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-5-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Capa 1</span>
+            <h2 id="slide-5-title">Prompt Maestro Pedagógico</h2>
+            <p class="lead">Define objetivos, secuencia, actividades, evaluación, tono, nivel educativo y estructura académica.</p>
+          </div>
+          <div class="accent-card">
+            <p>Su salida <strong>no es HTML</strong>. Su salida es contenido validable: claro, revisable y alineado con los criterios académicos antes de producir recursos digitales.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-6-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Capa 2</span>
+            <h2 id="slide-6-title">Prompt Maestro de Producción Digital</h2>
+            <p class="lead">Convierte el contenido validado en recursos HTML interactivos usando Codex.</p>
+          </div>
+          <ul class="file-list">
+            <li>lectura-interactiva.html</li>
+            <li>practica-guiada.html</li>
+            <li>practica-owlaris.html</li>
+            <li>proyecto-final.html</li>
+            <li>cierre.html</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-7-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Capa 3</span>
+            <h2 id="slide-7-title">Prompt Maestro Audiovisual</h2>
+          </div>
+          <div class="grid two">
+            <div class="card"><span class="icon">▶</span><h3>Producción multimedia</h3><p>Maneja videos, guiones, storyboard, podcast y piezas de apoyo.</p></div>
+            <div class="card"><span class="icon">AI</span><h3>Herramientas posibles</h3><p>Puede integrarse con HeyGen, Luma, Synthesia u otra herramienta audiovisual seleccionada.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-8-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Capa 4</span>
+            <h2 id="slide-8-title">Prompt Maestro QA</h2>
+            <p class="lead">Evalúa cada entrega antes de convertirla en estándar de producción.</p>
+          </div>
+          <div class="grid two">
+            <div class="card"><span class="icon">T</span><h3>QA técnico</h3><p>Botones, navegación, rutas, consola, responsividad y compatibilidad iframe.</p></div>
+            <div class="card"><span class="icon">P</span><h3>QA pedagógico</h3><p>Claridad, secuencia, andamiaje, retroalimentación y nivel educativo.</p></div>
+            <div class="card"><span class="icon">V</span><h3>QA visual</h3><p>Limpieza, consistencia institucional, legibilidad y ausencia de texto sobrepuesto.</p></div>
+            <div class="card"><span class="icon">C</span><h3>Canvas LMS</h3><p>Funcionamiento dentro de iframe, sin dependencias externas ni scroll horizontal.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-9-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Flujo profesional</span>
+            <h2 id="slide-9-title">Beneficios de Codex + GitHub</h2>
+          </div>
+          <ul>
+            <li>Reduce tiempo.</li>
+            <li>Estandariza estructura.</li>
+            <li>Permite revisión controlada.</li>
+            <li>Facilita reutilización.</li>
+            <li>Mejora trazabilidad.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-10-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Gobernanza digital</span>
+            <h2 id="slide-10-title">Privacidad y seguridad con GitHub</h2>
+          </div>
+          <ul>
+            <li>Repositorios privados.</li>
+            <li>Control de acceso.</li>
+            <li>Historial de cambios.</li>
+            <li>Recuperación de versiones.</li>
+            <li>Protección de propiedad intelectual.</li>
+            <li>Revisión mediante Pull Requests.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-11-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Costos de referencia</span>
+            <h2 id="slide-11-title">Licencias recomendadas</h2>
+          </div>
+          <div class="price-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Licencia</th>
+                  <th>Estimación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ChatGPT Team / Business</td>
+                  <td>USD 25–30 por usuario al mes.</td>
+                </tr>
+                <tr>
+                  <td>ChatGPT Pro</td>
+                  <td>USD 200 al mes para responsable principal.</td>
+                </tr>
+                <tr>
+                  <td>GitHub Team</td>
+                  <td>USD 4–5 por usuario al mes.</td>
+                </tr>
+                <tr>
+                  <td>Video IA</td>
+                  <td>Depende de la herramienta seleccionada.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Los precios son aproximados y deben confirmarse antes de contratar.</p>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-12-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Productividad esperada</span>
+            <h2 id="slide-12-title">Estimación de tiempos</h2>
+          </div>
+          <div class="comparison">
+            <div class="metric">
+              <div class="metric-title">Sin sistema</div>
+              <div class="metric-body"><span class="metric-value">120 h</span><p>4–5 horas por lección. 24 lecciones ≈ 120 horas.</p></div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Plantilla + Codex</div>
+              <div class="metric-body"><span class="metric-value">24–48 h</span><p>1–2 horas por lección para producir 24 lecciones.</p></div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Proceso maduro</div>
+              <div class="metric-body"><span class="metric-value">8–12 h</span><p>Producción de 24 lecciones con sistema estable y validado.</p></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-13-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Plan de avance</span>
+            <h2 id="slide-13-title">Ruta de implementación</h2>
+          </div>
+          <div class="timeline">
+            <div class="step"><span class="step-number">1</span><div class="step-text">Demo.</div></div>
+            <div class="step"><span class="step-number">2</span><div class="step-text">Lección modelo.</div></div>
+            <div class="step"><span class="step-number">3</span><div class="step-text">Sistema maestro.</div></div>
+            <div class="step"><span class="step-number">4</span><div class="step-text">Producción de 24 lecciones.</div></div>
+            <div class="step"><span class="step-number">5</span><div class="step-text">Escalamiento a otras materias.</div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" aria-labelledby="slide-14-title">
+        <div class="slide-content">
+          <div class="slide-title-row">
+            <span class="kicker">Decisión recomendada</span>
+            <h2 id="slide-14-title">Recomendación final</h2>
+          </div>
+          <div class="final-message">
+            <p class="subtitle">No generar las 24 lecciones de inmediato.</p>
+            <p class="lead">Primero crear una <strong>lección modelo oficial</strong>, validarla y usarla como estándar.</p>
+            <p class="lead">El objetivo no es que la IA haga cursos, sino que <strong>acelere la producción bajo control académico</strong>.</p>
+          </div>
+          <a class="demo-action" href="lecciones/leccion-01-variables/lectura-interactiva.html">Ver Demo Matemática →</a>
+        </div>
+      </article>
+    </section>
+
+    <footer class="controls">
+      <button class="nav-button previous" id="prevButton" type="button">← Anterior</button>
+      <p class="hint">También puedes usar las flechas del teclado.</p>
+      <button class="nav-button next" id="nextButton" type="button">Siguiente →</button>
+    </footer>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const currentSlide = document.getElementById('currentSlide');
+    const totalSlides = document.getElementById('totalSlides');
+    const progressBar = document.getElementById('progressBar');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    let activeIndex = 0;
+
+    totalSlides.textContent = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.classList.toggle('active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+
+      currentSlide.textContent = activeIndex + 1;
+      progressBar.style.width = `${((activeIndex + 1) / slides.length) * 100}%`;
+      prevButton.disabled = activeIndex === 0;
+      nextButton.disabled = activeIndex === slides.length - 1;
+    }
+
+    function goToSlide(nextIndex) {
+      activeIndex = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      updateSlide();
+    }
+
+    prevButton.addEventListener('click', () => goToSlide(activeIndex - 1));
+    nextButton.addEventListener('click', () => goToSlide(activeIndex + 1));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        goToSlide(activeIndex - 1);
+      }
+
+      if (event.key === 'ArrowRight') {
+        goToSlide(activeIndex + 1);
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
