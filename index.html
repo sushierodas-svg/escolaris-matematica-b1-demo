@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo Escolaris Matemática B1</title>
+  <title>Inicio Escolaris</title>
   <style>
     :root {
       --escolaris-orange: #db6015;
@@ -26,34 +26,28 @@
     }
 
     body {
-      background: linear-gradient(180deg, var(--escolaris-light) 0%, var(--escolaris-white) 100%);
+      align-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(247, 190, 0, 0.28), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(219, 96, 21, 0.18), transparent 32%),
+        linear-gradient(180deg, var(--escolaris-light) 0%, var(--escolaris-white) 100%);
       color: var(--escolaris-blue);
+      display: flex;
       font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+      justify-content: center;
       line-height: 1.5;
-    }
-
-    .preview-shell {
-      margin: 0 auto;
-      max-width: 1100px;
       padding: 24px;
-      width: 100%;
     }
 
-    .hero {
+    .home-card {
       background: var(--escolaris-white);
       border: 3px solid rgba(36, 75, 90, 0.12);
       border-radius: 28px;
-      box-shadow: 0 14px 32px rgba(36, 75, 90, 0.16);
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-
-    .hero-top {
-      background:
-        radial-gradient(circle at top left, rgba(247, 190, 0, 0.3), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(219, 96, 21, 0.18), transparent 35%),
-        var(--escolaris-white);
-      padding: 34px;
+      box-shadow: 0 18px 42px rgba(36, 75, 90, 0.18);
+      max-width: 860px;
+      padding: clamp(24px, 5vw, 48px);
+      text-align: center;
+      width: 100%;
     }
 
     .badge {
@@ -61,134 +55,92 @@
       border-radius: 999px;
       color: var(--escolaris-blue);
       display: inline-block;
-      font-weight: 800;
+      font-weight: 900;
+      letter-spacing: 0.04em;
       padding: 8px 16px;
+      text-transform: uppercase;
     }
 
     h1 {
       color: var(--escolaris-blue);
       font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.15;
-      margin: 16px 0 10px;
+      line-height: 1.1;
+      margin: 18px 0 12px;
     }
 
     p {
-      font-size: clamp(1.05rem, 2.2vw, 1.2rem);
-      margin: 0 0 16px;
+      color: rgba(36, 75, 90, 0.78);
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      font-weight: 650;
+      margin: 0 auto;
+      max-width: 620px;
     }
 
     .actions {
-      align-items: center;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 22px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 30px;
     }
 
-    .primary-link,
-    .secondary-link {
-      border-radius: 999px;
-      display: inline-block;
+    .action-button {
+      align-items: center;
+      border-radius: 20px;
+      color: var(--escolaris-white);
+      display: flex;
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
       font-weight: 900;
-      padding: 12px 18px;
+      justify-content: center;
+      min-height: 86px;
+      padding: 18px;
       text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
-    .primary-link {
+    .action-button:first-child {
       background: var(--escolaris-orange);
-      color: var(--escolaris-white);
+      box-shadow: 0 12px 24px rgba(219, 96, 21, 0.24);
     }
 
-    .secondary-link {
-      background: var(--escolaris-gold);
-      color: var(--escolaris-blue);
-    }
-
-    .primary-link:focus-visible,
-    .secondary-link:focus-visible {
-      outline: 4px solid rgba(36, 75, 90, 0.28);
-      outline-offset: 3px;
-    }
-
-    .preview-frame-card {
-      background: var(--escolaris-white);
-      border: 3px solid rgba(36, 75, 90, 0.12);
-      border-radius: 24px;
-      box-shadow: 0 12px 26px rgba(36, 75, 90, 0.12);
-      overflow: hidden;
-    }
-
-    .frame-heading {
-      align-items: center;
+    .action-button:last-child {
       background: var(--escolaris-blue);
-      color: var(--escolaris-white);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
-      padding: 16px 20px;
+      box-shadow: 0 12px 24px rgba(36, 75, 90, 0.22);
     }
 
-    .frame-heading h2 {
-      font-size: 1.2rem;
-      margin: 0;
+    .action-button:hover {
+      transform: translateY(-2px);
     }
 
-    .frame-note {
-      color: var(--escolaris-gold);
-      font-weight: 800;
-      margin: 0;
+    .action-button:focus-visible {
+      outline: 4px solid rgba(247, 190, 0, 0.72);
+      outline-offset: 4px;
     }
 
-    iframe {
-      border: 0;
-      display: block;
-      min-height: 760px;
-      width: 100%;
-    }
-
-    @media (max-width: 720px) {
-      .preview-shell {
-        padding: 12px;
+    @media (max-width: 680px) {
+      body {
+        padding: 14px;
       }
 
-      .hero,
-      .preview-frame-card {
-        border-radius: 18px;
+      .home-card {
+        border-radius: 22px;
       }
 
-      .hero-top {
-        padding: 24px 18px;
-      }
-
-      iframe {
-        min-height: 720px;
+      .actions {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <main class="preview-shell">
-    <section class="hero" aria-labelledby="preview-title">
-      <div class="hero-top">
-        <span class="badge">Vista previa</span>
-        <h1 id="preview-title">Escolaris Matemática B1</h1>
-        <p>Acceso rápido a la lectura interactiva de la Lección 1: <strong>Cuando una cantidad cambia</strong>.</p>
-        <p>Esta página permite abrir la lectura en una pestaña nueva o revisarla dentro de una vista tipo iframe.</p>
-        <div class="actions">
-          <a class="primary-link" href="lecciones/leccion-01-variables/lectura-interactiva.html">Abrir lectura interactiva</a>
-          <a class="secondary-link" href="lecciones/leccion-01-variables/lectura-interactiva.html" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
-        </div>
-      </div>
-    </section>
+  <main class="home-card" aria-labelledby="home-title">
+    <span class="badge">Escolaris</span>
+    <h1 id="home-title">Centro de demos</h1>
+    <p>Selecciona el recurso que deseas abrir.</p>
 
-    <section class="preview-frame-card" aria-labelledby="frame-title">
-      <div class="frame-heading">
-        <h2 id="frame-title">Vista incrustada de la lectura</h2>
-        <p class="frame-note">Lección 1</p>
-      </div>
-      <iframe src="lecciones/leccion-01-variables/lectura-interactiva.html" title="Lectura interactiva: Cuando una cantidad cambia"></iframe>
-    </section>
+    <nav class="actions" aria-label="Recursos disponibles">
+      <a class="action-button" href="lecciones/leccion-01-variables/lectura-interactiva.html">Ver Demo Matemática</a>
+      <a class="action-button" href="propuesta_sistema_maestro_escolaris_ia.html">Ver Presentación Sistema Maestro IA</a>
+    </nav>
   </main>
 </body>
 </html>
