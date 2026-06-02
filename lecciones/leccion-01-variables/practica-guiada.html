@@ -1,1 +1,610 @@
-<!-- Práctica guiada de la lección 1 -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lección 1: Práctica guiada</title>
+  <style>
+    :root {
+      --escolaris-orange: #db6015;
+      --escolaris-gold: #f7be00;
+      --escolaris-blue: #244b5a;
+      --escolaris-red: #993921;
+      --escolaris-light: #f0f8ff;
+      --escolaris-white: #ffffff;
+      --shadow: 0 14px 32px rgba(36, 75, 90, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: linear-gradient(180deg, var(--escolaris-light) 0%, var(--escolaris-white) 100%);
+      color: var(--escolaris-blue);
+      font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+      line-height: 1.5;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .lesson-shell {
+      margin: 0 auto;
+      max-width: 980px;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .book-card {
+      background: var(--escolaris-white);
+      border: 3px solid rgba(36, 75, 90, 0.12);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      min-height: 620px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-wrap {
+      background: rgba(36, 75, 90, 0.1);
+      height: 14px;
+      width: 100%;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, var(--escolaris-orange), var(--escolaris-gold));
+      height: 100%;
+      transition: width 0.25s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      color: var(--escolaris-blue);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 14px 24px 0;
+      text-align: right;
+    }
+
+    .screen {
+      display: none;
+      min-height: 480px;
+      padding: 24px 44px 30px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .cover {
+      align-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(247, 190, 0, 0.28), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(219, 96, 21, 0.2), transparent 36%),
+        var(--escolaris-white);
+      display: grid;
+      min-height: 540px;
+      place-items: center;
+      text-align: center;
+    }
+
+    .cover-badge,
+    .tag {
+      background: var(--escolaris-gold);
+      border-radius: 999px;
+      color: var(--escolaris-blue);
+      display: inline-block;
+      font-weight: 800;
+      padding: 8px 16px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--escolaris-blue);
+      line-height: 1.15;
+      margin: 0 0 16px;
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 7vw, 4.4rem);
+      margin-top: 18px;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+    }
+
+    h3 {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+    }
+
+    p,
+    li {
+      font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .lead {
+      font-size: clamp(1.15rem, 2.7vw, 1.45rem);
+      font-weight: 650;
+    }
+
+    .grid-two {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 18px;
+    }
+
+    .info-card,
+    .example-card,
+    .activity-card {
+      background: var(--escolaris-light);
+      border: 2px solid rgba(36, 75, 90, 0.12);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .example-card strong,
+    .activity-card strong,
+    .fixed-number {
+      color: var(--escolaris-red);
+    }
+
+    .big-symbol {
+      align-items: center;
+      background: var(--escolaris-blue);
+      border-radius: 28px;
+      color: var(--escolaris-white);
+      display: flex;
+      font-size: clamp(4rem, 14vw, 7rem);
+      font-weight: 900;
+      justify-content: center;
+      min-height: 190px;
+    }
+
+    .letter-chip {
+      background: var(--escolaris-orange);
+      border-radius: 18px;
+      color: var(--escolaris-white);
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin: 4px 6px 4px 0;
+      min-width: 44px;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    .click-options {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .option-btn {
+      background: var(--escolaris-white);
+      border: 3px solid var(--escolaris-blue);
+      border-radius: 18px;
+      color: var(--escolaris-blue);
+      cursor: pointer;
+      font-weight: 750;
+      padding: 14px 16px;
+      text-align: left;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      width: 100%;
+    }
+
+    .option-btn:hover,
+    .option-btn:focus-visible {
+      background: var(--escolaris-light);
+      outline: 3px solid rgba(247, 190, 0, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .option-btn.correct {
+      background: rgba(247, 190, 0, 0.25);
+      border-color: var(--escolaris-gold);
+    }
+
+    .option-btn.incorrect {
+      background: rgba(153, 57, 33, 0.08);
+      border-color: var(--escolaris-red);
+    }
+
+    .feedback {
+      border-radius: 18px;
+      font-size: 1.05rem;
+      font-weight: 750;
+      margin-top: 16px;
+      min-height: 56px;
+      padding: 14px 16px;
+    }
+
+    .feedback:empty {
+      display: none;
+    }
+
+    .feedback.good {
+      background: rgba(247, 190, 0, 0.3);
+      border: 2px solid var(--escolaris-gold);
+    }
+
+    .feedback.try {
+      background: rgba(219, 96, 21, 0.12);
+      border: 2px solid var(--escolaris-orange);
+    }
+
+    .controls {
+      align-items: center;
+      background: var(--escolaris-blue);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 18px 24px;
+    }
+
+    .nav-btn {
+      background: var(--escolaris-gold);
+      border: 0;
+      border-radius: 999px;
+      color: var(--escolaris-blue);
+      cursor: pointer;
+      font-weight: 900;
+      min-width: 132px;
+      padding: 12px 18px;
+    }
+
+    .nav-btn:hover,
+    .nav-btn:focus-visible {
+      outline: 3px solid var(--escolaris-white);
+    }
+
+    .nav-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .screen-dots {
+      color: var(--escolaris-white);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .reflection-box {
+      background: var(--escolaris-blue);
+      border-radius: 24px;
+      color: var(--escolaris-white);
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    .reflection-box p,
+    .reflection-box h2 {
+      color: var(--escolaris-white);
+    }
+
+    .visual-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .visual-item {
+      background: var(--escolaris-gold);
+      border-radius: 16px;
+      color: var(--escolaris-blue);
+      font-size: 1.6rem;
+      font-weight: 900;
+      min-width: 56px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .step {
+      align-items: flex-start;
+      background: var(--escolaris-white);
+      border: 2px solid rgba(36, 75, 90, 0.16);
+      border-radius: 18px;
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .step-number {
+      align-items: center;
+      background: var(--escolaris-orange);
+      border-radius: 50%;
+      color: var(--escolaris-white);
+      display: inline-flex;
+      flex: 0 0 38px;
+      font-weight: 900;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+    }
+
+    .mini-label {
+      color: var(--escolaris-red);
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 850;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .lesson-shell {
+        padding: 10px;
+      }
+
+      .book-card {
+        border-radius: 20px;
+        min-height: auto;
+      }
+
+      .screen {
+        min-height: 450px;
+        padding: 20px 18px 24px;
+      }
+
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        padding: 14px;
+      }
+
+      .nav-btn {
+        min-width: 104px;
+        padding: 11px 12px;
+      }
+
+      .screen-dots {
+        font-size: 0.9rem;
+      }
+
+      .step {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="lesson-shell" aria-label="Práctica guiada: Variables y cantidades que cambian">
+    <section class="book-card">
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-text" id="progressText">Pantalla 1 de 8</div>
+
+      <article class="screen cover active" data-screen="1">
+        <div>
+          <span class="cover-badge">Práctica guiada</span>
+          <h1>Variables y cantidades que cambian</h1>
+          <p class="lead">Practica paso a paso cómo reconocer una cantidad fija, una cantidad que cambia y una variable.</p>
+          <p>Tiempo sugerido: 10 a 15 minutos. Toca tus respuestas para recibir retroalimentación inmediata.</p>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="2">
+        <span class="tag">Recordemos</span>
+        <h2>Antes de practicar</h2>
+        <div class="grid-two">
+          <div class="info-card">
+            <h3>Cantidad fija</h3>
+            <p>Se queda igual dentro de la situación.</p>
+            <p>Ejemplo: una tricicleta tiene <span class="fixed-number">3</span> ruedas.</p>
+          </div>
+          <div class="info-card">
+            <h3>Cantidad que cambia</h3>
+            <p>Puede aumentar, disminuir o tener distintos valores.</p>
+            <p>Ejemplo: la cantidad de tricicletas en el patio.</p>
+          </div>
+        </div>
+        <p style="margin-top: 18px;">Una <strong>variable</strong> es una letra que representa una cantidad que puede cambiar.</p>
+      </article>
+
+      <article class="screen" data-screen="3">
+        <span class="tag">Ejemplo guiado</span>
+        <h2>Resolvamos juntos</h2>
+        <p>Situación: En una mesa hay platos. Cada plato tiene 5 galletas.</p>
+        <div class="activity-card">
+          <div class="step-list">
+            <div class="step">
+              <span class="step-number">1</span>
+              <div>
+                <span class="mini-label">Busca lo fijo</span>
+                <p>Cada plato tiene <strong>5 galletas</strong>. Ese número se repite en cada plato.</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-number">2</span>
+              <div>
+                <span class="mini-label">Busca lo que cambia</span>
+                <p>La cantidad de <strong>platos</strong> puede ser 1, 2, 3 o más.</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-number">3</span>
+              <div>
+                <span class="mini-label">Nombra con una letra</span>
+                <p>Podemos usar <span class="letter-chip">p</span> para representar la cantidad de platos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="4">
+        <span class="tag">Ejercicio 1</span>
+        <h2>Encuentra la cantidad fija</h2>
+        <p>Lee la situación y toca la cantidad que se queda igual.</p>
+        <div class="activity-card">
+          <p>En cada bolsa hay 4 manzanas. En la mesa puede haber varias bolsas.</p>
+          <div class="click-options" data-activity="fixed-apples">
+            <button class="option-btn" type="button" data-correct="true" data-good="¡Correcto! Las 4 manzanas de cada bolsa son la cantidad fija en esta situación." data-try="">4 manzanas en cada bolsa</button>
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Intenta otra vez. La cantidad de bolsas puede cambiar si ponen o quitan bolsas de la mesa.">Cantidad de bolsas en la mesa</button>
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Casi. La mesa es parte de la escena, pero no es la cantidad fija que buscamos.">La mesa</button>
+          </div>
+          <div class="feedback" aria-live="polite"></div>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="5">
+        <span class="tag">Ejercicio 2</span>
+        <h2>Encuentra la cantidad que cambia</h2>
+        <p>Ahora toca la cantidad que puede tener distintos valores.</p>
+        <div class="activity-card">
+          <p>Un álbum tiene espacios para fotos. Cada semana Sofía pega algunas fotos nuevas.</p>
+          <div class="click-options" data-activity="variable-photos">
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Piensa de nuevo. El álbum es el lugar donde se pegan las fotos, no la cantidad que va cambiando.">El álbum</button>
+            <button class="option-btn" type="button" data-correct="true" data-good="¡Muy bien! La cantidad de fotos pegadas cambia cuando Sofía agrega fotos nuevas." data-try="">Fotos pegadas</button>
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Casi. Una semana ayuda a contar el tiempo, pero buscamos la cantidad que aumenta.">1 semana</button>
+          </div>
+          <div class="feedback" aria-live="polite"></div>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="6">
+        <span class="tag">Ejercicio 3</span>
+        <h2>Elige una variable</h2>
+        <p>Queremos representar la cantidad de <strong>globos</strong> que hay en una fiesta.</p>
+        <div class="grid-two">
+          <div class="big-symbol">?</div>
+          <div class="activity-card">
+            <p>¿Qué letra ayuda a recordar la palabra globos?</p>
+            <div class="click-options" data-activity="letter-balloons">
+              <button class="option-btn" type="button" data-correct="false" data-good="" data-try="La letra x puede usarse a veces, pero no recuerda claramente la palabra globos.">x</button>
+              <button class="option-btn" type="button" data-correct="true" data-good="¡Excelente! La letra g ayuda a recordar globos. Podemos decir: g representa la cantidad de globos." data-try="">g</button>
+              <button class="option-btn" type="button" data-correct="false" data-good="" data-try="La letra p podría servir para otra palabra, como pelotas o plantas. Para globos, g ayuda más.">p</button>
+            </div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="7">
+        <span class="tag">Ejercicio 4</span>
+        <h2>Une la idea completa</h2>
+        <p>Lee y elige la explicación más clara.</p>
+        <div class="activity-card">
+          <p>En una caja hay crayones. La cantidad de crayones puede cambiar cuando alguien agrega o saca crayones.</p>
+          <div class="click-options" data-activity="full-idea">
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Revisa la situación. Si alguien agrega o saca crayones, la cantidad no se queda igual.">La cantidad de crayones es fija porque siempre vale lo mismo.</button>
+            <button class="option-btn" type="button" data-correct="true" data-good="¡Correcto! La cantidad de crayones cambia, por eso una letra como c puede representarla." data-try="">La cantidad de crayones cambia y puede representarse con c.</button>
+            <button class="option-btn" type="button" data-correct="false" data-good="" data-try="Casi. La caja es el objeto, pero la cantidad que cambia son los crayones dentro de ella.">La caja es una variable porque puede abrirse.</button>
+          </div>
+          <div class="feedback" aria-live="polite"></div>
+        </div>
+      </article>
+
+      <article class="screen" data-screen="8">
+        <span class="tag">Cierre</span>
+        <h2>Revisa tu estrategia</h2>
+        <p>Cuando encuentres una situación con cantidades, usa estos pasos:</p>
+        <div class="visual-row" aria-label="Pasos para reconocer variables">
+          <div class="visual-item">1. Fijo</div>
+          <div class="visual-item">2. Cambia</div>
+          <div class="visual-item">3. Letra</div>
+        </div>
+        <div class="reflection-box">
+          <h2>Piensa un momento</h2>
+          <p>¿Qué pregunta te ayudó más: “se queda igual” o “puede cambiar”?</p>
+          <p>Guarda esa pregunta para la siguiente práctica.</p>
+        </div>
+      </article>
+
+      <nav class="controls" aria-label="Navegación de la práctica guiada">
+        <button class="nav-btn" id="prevBtn" type="button">← Anterior</button>
+        <div class="screen-dots" id="screenDots">1 / 8</div>
+        <button class="nav-btn" id="nextBtn" type="button">Siguiente →</button>
+      </nav>
+    </section>
+  </main>
+
+  <script>
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const screenDots = document.getElementById('screenDots');
+    let currentScreen = 0;
+
+    function updateScreen() {
+      screens.forEach((screen, index) => {
+        screen.classList.toggle('active', index === currentScreen);
+      });
+
+      const screenNumber = currentScreen + 1;
+      const totalScreens = screens.length;
+      const progress = (screenNumber / totalScreens) * 100;
+
+      progressBar.style.width = `${progress}%`;
+      progressText.textContent = `Pantalla ${screenNumber} de ${totalScreens}`;
+      screenDots.textContent = `${screenNumber} / ${totalScreens}`;
+      prevBtn.disabled = currentScreen === 0;
+      nextBtn.disabled = currentScreen === totalScreens - 1;
+      nextBtn.textContent = currentScreen === totalScreens - 1 ? 'Finalizado' : 'Siguiente →';
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentScreen > 0) {
+        currentScreen -= 1;
+        updateScreen();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentScreen < screens.length - 1) {
+        currentScreen += 1;
+        updateScreen();
+      }
+    });
+
+    document.querySelectorAll('.click-options').forEach((group) => {
+      const feedback = group.parentElement.querySelector('.feedback');
+      const buttons = Array.from(group.querySelectorAll('.option-btn'));
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const isCorrect = button.dataset.correct === 'true';
+          buttons.forEach((option) => option.classList.remove('correct', 'incorrect'));
+          button.classList.add(isCorrect ? 'correct' : 'incorrect');
+          feedback.textContent = isCorrect ? button.dataset.good : button.dataset.try;
+          feedback.className = `feedback ${isCorrect ? 'good' : 'try'}`;
+        });
+      });
+    });
+
+    updateScreen();
+  </script>
+</body>
+</html>
